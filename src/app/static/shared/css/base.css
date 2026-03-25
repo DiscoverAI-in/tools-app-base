@@ -1,0 +1,78 @@
+/* ── Base reset & shared variables ────────────────────────────── */
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-border: #2a2d3a;
+  --color-text: #e4e4e7;
+  --color-text-muted: #a1a1aa;
+  --color-primary: #6366f1;
+  --color-primary-hover: #818cf8;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ── Utility classes ─────────────────────────────────────────── */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn:hover {
+  background: var(--color-primary-hover);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}

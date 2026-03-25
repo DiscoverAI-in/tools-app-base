@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home — FastAPI Apps</title>
+  <link rel="stylesheet" href="/static/css/base.css" />
+  <style>
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .app-card {
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .app-card:hover {
+      border-color: var(--color-primary);
+    }
+    .app-card h3 { margin-bottom: 0.35rem; }
+    .app-card p  { font-size: 0.875rem; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      color: #4ade80;
+      margin-top: 1rem;
+    }
+    .status-badge .dot {
+      width: 6px; height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="container">
+  <h1>🚀 FastAPI Apps</h1>
+  <p class="text-muted">Multi-app platform — pick an app below.</p>
+
+  <div class="status-badge" v-if="health">
+    <span class="dot"></span>
+    API {{ health.status }} — v{{ health.version }}
+  </div>
+
+  <div class="app-grid">
+    <a v-for="app in apps" :key="app.slug" :href="'/' + app.slug" class="card app-card">
+      <h3>{{ app.icon }} {{ app.name }}</h3>
+      <p class="text-muted">{{ app.description }}</p>
+    </a>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="/static/js/api.js"></script>
+<script>
+const { createApp, ref, onMounted } = Vue;
+
+createApp({
+  setup() {
+    const health = ref(null);
+
+    // ── Register your apps here ──────────────────────
+    const apps = ref([
+      {
+        slug: 'source-to-final',
+        name: 'Source to Final',
+        icon: '🔄',
+        description: 'Transform source content into polished final output.',
+      },
+      // Add more apps:
+      // { slug: 'my-new-app', name: 'My New App', icon: '✨', description: '...' },
+    ]);
+
+    onMounted(async () => {
+      try {
+        health.value = await api.get('/api/v1/health');
+      } catch (e) {
+        console.warn('Health check failed:', e);
+      }
+    });
+
+    return { health, apps };
+  },
+}).mount('#app');
+</script>
+
+</body>
+</html>

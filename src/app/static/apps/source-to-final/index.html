@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Source to Final</title>
+  <link rel="stylesheet" href="/static/css/base.css" />
+  <style>
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+    nav a { font-size: 0.875rem; }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) {
+      .editor-grid { grid-template-columns: 1fr; }
+    }
+
+    .editor-grid label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 240px;
+      padding: 0.75rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      resize: vertical;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .actions {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="container">
+  <nav>
+    <a href="/">← Home</a>
+    <span style="color: var(--color-text-muted)">|</span>
+    <strong>Source to Final</strong>
+  </nav>
+
+  <div class="card">
+    <div class="editor-grid">
+      <div>
+        <label>Source Input</label>
+        <textarea
+          v-model="source"
+          placeholder="Paste your source content here..."
+        ></textarea>
+      </div>
+      <div>
+        <label>Final Output</label>
+        <textarea
+          :value="output"
+          readonly
+          placeholder="Transformed output appears here..."
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" @click="transform" :disabled="loading || !source.trim()">
+        {{ loading ? 'Processing…' : '🔄 Transform' }}
+      </button>
+      <button class="btn" style="background: var(--color-surface); border: 1px solid var(--color-border);" @click="reset">
+        Clear
+      </button>
+      <span class="char-count">{{ source.length }} chars</span>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="/static/js/api.js"></script>
+<script>
+const { createApp, ref } = Vue;
+
+createApp({
+  setup() {
+    const source  = ref('');
+    const output  = ref('');
+    const loading = ref(false);
+
+    async function transform() {
+      loading.value = true;
+      try {
+        // Replace with your actual API endpoint:
+        // const data = await api.post('/api/v1/source-to-final/transform', { text: source.value });
+        // output.value = data.result;
+
+        // Demo: simple echo transform
+        await new Promise(r => setTimeout(r, 400));
+        output.value = source.value.toUpperCase();
+      } catch (e) {
+        output.value = `Error: ${e.message}`;
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    function reset() {
+      source.value = '';
+      output.value = '';
+    }
+
+    return { source, output, loading, transform, reset };
+  },
+}).mount('#app');
+</script>
+
+</body>
+</html>
